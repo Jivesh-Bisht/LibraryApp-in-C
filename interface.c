@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 #include "library.h"
+#include "authentication.h"
 
 
 enum tf {False,True};
@@ -24,7 +25,9 @@ int main(){
     while(run){
         printf("0. Exit \n");
         printf("1. Print whole library \n");
-        printf("What do you want to do??\t->");
+        printf("2. Login \n");
+        printf("3. Signup\n");
+        printf("What do you want to do??   ->");
         
         // Check if scanf successfully reads an integer
         if (scanf("%d", &input) != 1) {
@@ -35,10 +38,61 @@ int main(){
         
         clear_input_buffer();
 
-        if (input == 1) {
-            readWholeLibrary();
-        }else if (input==0){
+        switch (input){
+            case 0:
+            run = False;
             break;
+
+            case 1:
+            readWholeLibrary();
+            break;
+
+            case 2: {
+            printf("Enter your username: ");
+            char username[50];
+            scanf("%s",username);
+            int isUser = checkUser(username);
+
+            if (isUser){
+                printf("Enter your password: ");
+                char password[50];
+                scanf("%s",password);
+                int isPassword = checkPassword(password);
+
+                if (isPassword){
+                    printf("Welcome %s!\n",username);
+
+                }else{
+                    printf("Password was incorrect!\n");
+                }
+
+            } else{
+                printf("User with the name \"%s\" not found! \n",username);
+            }
+            break;
+        }
+
+            case 3:{
+            printf("Enter your username: ");
+            char username[50];
+            scanf("%s",username);
+            int isUser = checkUser(username);
+            if (isUser){
+                printf("Username already in use! Please use another username\n");
+            }else{
+                char password[50];
+                printf("Enter a secure password: ");
+                scanf("%s",password);
+                int done = addUser(username,password);
+                if (done){
+                    printf("Welcome %s\n",username);
+
+                }else{
+                    printf("An Unexpected error occured!\n");
+                }
+            }
+            break;
+        }
         }
 
     }

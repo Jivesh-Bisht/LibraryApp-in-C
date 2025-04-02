@@ -2,6 +2,8 @@
 #include <string.h>
 #include <stdlib.h>
 
+enum tf{False,True};
+
 typedef struct {
     int id;
     char name[50];
@@ -14,6 +16,7 @@ void printUsers();
 int addUser(char name[50], char password[50]);
 int removeUser(char name[50]);
 int checkUser(char name[50]);
+int checkPassword(char password[50]);
 // End Prototyping ---------------------------------------------------------
 
 int addUser(char name[50], char password[50]) {
@@ -27,7 +30,7 @@ int addUser(char name[50], char password[50]) {
         while (fscanf(file, "%d %s %s %d", &u.id, u.name, u.password, &u.isAdmin) == 4) {
             if (strcmp(name, u.name) == 0) {
                 fclose(file);
-                return 1; // User already exists
+                return False; // User already exists
             }
             id = u.id;
         }
@@ -44,13 +47,13 @@ int addUser(char name[50], char password[50]) {
     file = fopen(filename, "a");
     if (!file) {
         perror("Error opening file for writing");
-        return 1;
+        return False;
     }
 
-    int isAdmin = 0; // New users are typically not admins
+    int isAdmin = 0; // Users are not admins, admins may get another function??
     fprintf(file, "%d %s %s %d\n", id, name, password, isAdmin);
     fclose(file);
-    return 0;
+    return True;
 }
 
 int removeUser(char nameToRemove[50]) {
@@ -61,13 +64,13 @@ int removeUser(char nameToRemove[50]) {
 
     if (!file) {
         perror("Error opening users.txt for reading");
-        return 1;
+        return False;
     }
 
     if (!tempFile) {
         perror("Error opening temp_users.txt for writing");
         fclose(file);
-        return 1;
+        return False;
     }
 
     USER u;
@@ -88,11 +91,11 @@ int removeUser(char nameToRemove[50]) {
         remove(filename);
         rename(tempFilename, filename);
         printf("User '%s' removed successfully.\n", nameToRemove);
-        return 0;
+        return True;
     } else {
         remove(tempFilename); // Delete the temporary file
         printf("User '%s' not found.\n", nameToRemove);
-        return 1;
+        return False;
     }
 }
 
@@ -103,10 +106,23 @@ int checkUser(char name[50]) {
     while (fscanf(file, "%d %s %s %d", &u.id, u.name, u.password, &u.isAdmin) == 4) {
         if (strcmp(name, u.name) == 0) {
             fclose(file);
-            return 0;
+            return True;
         }}
     fclose(file);
-    return 1;
+    return False;
+}
+
+int checkPassword(char password[50]) {
+    USER u;
+    const char filename[] = "users.txt";
+    FILE *file = fopen(filename, "r");
+    while (fscanf(file, "%d %s %s %d", &u.id, u.name, u.password, &u.isAdmin) == 4) {
+        if (strcmp(password, u.password) == 0) {
+            fclose(file);
+            return True;
+        }}
+    fclose(file);
+    return False;
 }
 
 void printUsers() {
@@ -123,7 +139,4 @@ void printUsers() {
     fclose(file);
 }
 
-int main() {
-    printUsers();
-    return 0;
-}
+

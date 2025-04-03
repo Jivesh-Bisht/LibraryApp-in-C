@@ -17,6 +17,45 @@ void clear_input_buffer() {
     while ((c = getchar()) != '\n' && c != EOF);
 }
 
+void afterLogin(char username[50]){
+    int run = True;
+    int input;
+    while (run){
+        printf("0. Loan a book\n");
+        printf("1. Return a book\n");
+        printf("2. Logout\n");
+        printf("3. Delete this account\n");
+        printf("What do you want to do??   ->");
+        // Check if scanf successfully reads an integer
+        if (scanf("%d", &input) != 1) {
+            clear_input_buffer();
+            printf("Invalid input! Please enter a number.\n");
+            continue; // Skip the rest of the loop iteration
+        }
+        
+        clear_input_buffer();
+
+        switch (input){
+            case 0:{
+                break;
+            }
+
+            case 1:{
+                break;
+            }
+
+            case 2:{
+                break;
+            }
+
+            case 3:{
+                break;
+            }
+        }
+        
+    }
+}   
+
 int main(){
     int run=True;
     printf("-----------------------------\n");
@@ -61,6 +100,7 @@ int main(){
 
                 if (isPassword){
                     printf("Welcome %s!\n",username);
+                    afterLogin(username);
 
                 }else{
                     printf("Password was incorrect!\n");
@@ -86,7 +126,7 @@ int main(){
                 int done = addUser(username,password);
                 if (done){
                     printf("Welcome %s\n",username);
-
+                    afterLogin(username);
                 }else{
                     printf("An Unexpected error occured!\n");
                 }
@@ -97,5 +137,6 @@ int main(){
 
     }
     printf("Thanks for coming to our library, hope to see you soon!!");
+    scanf("%s");
     return 0;
 }

@@ -60,6 +60,21 @@ int saveBook(char name[50],char author[50],int lent) {
     return 0;
 }
 
+int loanBook(char username[50],int bookId){
+    const char filename[] = "books.txt";
+    FILE *file = fopen(filename, "r");
+    BOOK b;
+    while (fscanf(file,"%d %s %s %d %s",&b.id,b.name,b.author,&b.lent,b.lentTo) == 5){
+        if(b.id == bookId){
+            
+            return True;
+        }
+    }
+    return False;
+}
+int returnBook(){
+
+}
 // Prints out the whole Library
 void readWholeLibrary() {
     const char filename[] = "books.txt";
